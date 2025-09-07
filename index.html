@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ganpati Festival 2K25</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-header">
+      <div class="navbar-logo">Ganesh Festival 2K25</div>
+      <div class="navbar-toggle" id="navbarToggle" onclick="toggleNavbar()">☰</div>
+    </div>
+    <div class="navbar-links" id="navLinks">
+      <a href="index.html">Contributions</a>
+      <a href="spending.html">Spendings</a>
+      <a href="calculation.html">Calculation</a>
+    </div>
+  </div>
+</nav>
+
+
+<div class="image-slider">
+  <div class="slides" id="slides">
+    <img src="https://static.vecteezy.com/system/resources/thumbnails/003/443/226/small_2x/ganpati-black-and-white-illustration-happy-ganesh-chaturthi-free-vector.jpg" alt="ganpati_bappa_logo" class="slide-image">
+    <img src="img/ganpati1.jpeg" alt="ganesh" class="slide-image">
+    <img src="img/favicon.png" alt="ganpati_favicon" class="slide-image">
+    <img src="img/ganesh_icon1.png" alt="ganesh_icon1" class="slide-image">
+  </div>
+  <div class="slider-dots" id="sliderDots"></div>
+</div>
+
+  <h1>Atharva Shrusti</h1>
+  <h2 style="text-align: center; margin-top: 5px;">Ganesh Festival Event 2K25</h2>
+  <marquee style="background-color: red;color: white;height: 25px;border-radius: 10px;">
+    Developed & Designed by -> Abhishek Dhakne</marquee>
+    <h2 style="text-align: center;">Amount received</h2>
+  <div class="filter-buttons">
+  <button onclick="filterFlat('All')">All</button>
+  <button onclick="filterFlat('A')">A-Wing</button>
+  <button onclick="filterFlat('B')">B-Wing</button>
+  <button onclick="filterFlat('C')">C-Wing</button>
+  <button onclick="filterFlat('Other')">Contractor</button>
+  <button onclick="filterFlat('M')">Mahaprasad</button>
+</div>
+
+<div id="total-contri"></div>
+  <div id="records" class="table table-contributions">
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+  function toggleNavbar() {
+    const navLinks = document.getElementById('navLinks');
+    const toggleBtn = document.getElementById('navbarToggle');
+
+    navLinks.classList.toggle('show');
+
+    if (navLinks.classList.contains('show')) {
+      navLinks.style.maxHeight = navLinks.scrollHeight + "px";
+      toggleBtn.textContent = '✖';
+    } else {
+      navLinks.style.maxHeight = null;
+      toggleBtn.textContent = '☰';
+    }
+  }
+</script>
+
+
+<script>
+  const slidesContainer = document.getElementById("slides");
+  const slideImages = document.querySelectorAll(".slide-image");
+  const dotContainer = document.getElementById("sliderDots");
+  let slideIndex = 0;
+
+  // Create dots
+  slideImages.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.addEventListener("click", () => showSlide(i));
+    dotContainer.appendChild(dot);
+  });
+
+  const dots = dotContainer.querySelectorAll("span");
+
+  function showSlide(index) {
+    slideIndex = index;
+    const offset = -slideIndex * 100;
+    slidesContainer.style.transform = `translateX(${offset}%)`;
+    updateDots();
+  }
+
+  function updateDots() {
+    dots.forEach(dot => dot.classList.remove("active"));
+    dots[slideIndex].classList.add("active");
+  }
+
+  // Auto Slide
+  setInterval(() => {
+    slideIndex = (slideIndex + 1) % slideImages.length;
+    showSlide(slideIndex);
+  }, 5000);
+
+  // Init
+  showSlide(slideIndex);
+</script>
+
+
+
+</body>
+</html>

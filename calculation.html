@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculation</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-header">
+      <div class="navbar-logo">Ganesh Festival 2K25</div>
+      <div class="navbar-toggle" id="navbarToggle" onclick="toggleNavbar()">☰</div>
+    </div>
+    <div class="navbar-links" id="navLinks">
+      <a href="index.html">Contributions</a>
+      <a href="spending.html">Spendings</a>
+      <a href="calculation.html">Calculation</a>
+    </div>
+  </div>
+</nav>
+
+<h1>Total Calculation</h1>
+
+<canvas id="pieChart" width="400" height="400" style="max-width:100%; margin:auto; display:block;"></canvas>
+
+
+<div style="text-align:center; margin-top:30px;">
+  <h2>Total Received: ₹<span id="totalContribution">0</span></h2>
+  <h2>Total Spending: ₹<span id="totalSpending">0</span></h2>
+  <hr>
+  <h2>Remaining amount : ₹<span id="totalCalculation">0</span></h2>
+</div>
+
+<script src="script.js"></script>
+<script src="spending.js"></script>
+
+<script>
+  function toggleNavbar() {
+    const navLinks = document.getElementById('navLinks');
+    const toggleBtn = document.getElementById('navbarToggle');
+
+    navLinks.classList.toggle('show');
+
+    if (navLinks.classList.contains('show')) {
+      navLinks.style.maxHeight = navLinks.scrollHeight + "px";
+      toggleBtn.textContent = '✖';
+    } else {
+      navLinks.style.maxHeight = null;
+      toggleBtn.textContent = '☰';
+    }
+  }
+
+  const wingTotals = { A: 0, B: 0, C: 0, Other: 0, M:0 };
+  let totalContribution = 0;
+
+  allData.forEach(record => {
+    const amount = parseFloat(record.amount) || 0;
+    totalContribution += amount;
+
+    if (record.flat === 'A') wingTotals.A += amount;
+    else if (record.flat === 'B') wingTotals.B += amount;
+    else if (record.flat === 'C') wingTotals.C += amount;
+    else if (record.flat === 'Other') wingTotals.Other += amount;
+    else if (record.flat === 'M') wingTotals.M += amount;
+  });
+
+  // Calculate total spending
+  let totalSpending = 0;
+  spendingData.forEach(item => {
+    const amount = parseFloat(item.amount);
+    if (!isNaN(amount)) totalSpending += amount;
+  });
+
+  let totalCalculation= 0;
+  totalCalculation = totalContribution-totalSpending;
+
+  // Update totals on page
+  document.getElementById("totalContribution").innerText = totalContribution.toLocaleString('en-IN');
+  document.getElementById("totalSpending").innerText = totalSpending.toLocaleString('en-IN');
+  document.getElementById("totalCalculation").innerText = totalCalculation.toLocaleString('en-IN');
+
+  // Show Surplus or Deficit
+  const difference = totalContribution - totalSpending;
+  const balanceText = difference >= 0
+    ? `✅ Surplus: ₹${difference.toLocaleString('en-IN')}`
+    : `❌ Deficit: ₹${Math.abs(difference).toLocaleString('en-IN')}`;
+  const balanceStatus = document.getElementById("balanceStatus");
+  if (balanceStatus) {
+  balanceStatus.innerText = balanceText;
+  balanceStatus.style.color = difference >= 0 ? '#28a745' : '#dc3545';
+}
+
+  // Render pie chart
+  const ctx = document.getElementById('pieChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['A Wing', 'B Wing', 'C Wing','Contractors','Mahaprasad Contributors'],
+      datasets: [{
+        label: 'Contribution by Wing',
+        data: [wingTotals.A, wingTotals.B, wingTotals.C,wingTotals.Other,wingTotals.M],
+        backgroundColor: [
+          '#007bff', // A
+          '#eee82b', // B
+          '#28a745',  // C
+          '#ff0000ff', //Contractor
+          '#110567' //Mahaprasad
+        ],
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+        },
+        title: {
+          display: true,
+          text: 'Wing-wise Contribution chart'
+        },
+        tooltip: {
+            callbacks: {
+          label: function(context) {
+            const dataset = context.dataset;
+            const total = dataset.data.reduce((sum, val) => sum + val, 0);
+            const currentValue = context.raw;
+            const percentage = ((currentValue / total) * 100).toFixed(2);
+            return `${context.label}: ₹${currentValue.toLocaleString('en-IN')} (${percentage}%)`;
+          }
+        }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>

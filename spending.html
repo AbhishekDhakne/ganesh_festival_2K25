@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Spending Records</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-header">
+      <div class="navbar-logo">Ganesh Festival 2K25</div>
+      <div class="navbar-toggle" id="navbarToggle" onclick="toggleNavbar()">☰</div>
+    </div>
+    <div class="navbar-links" id="navLinks">
+      <a href="index.html">Contributions</a>
+      <a href="spending.html">Spendings</a>
+      <a href="calculation.html">Calculation</a>
+    </div>
+  </div>
+</nav>
+
+  <h1>Ganpati Festival 2K25</h1>
+
+  <div id="total-spending">
+  </div>
+  <div id="spending-records" class="table table-spending">
+    <!-- Spending records will be populated here -->
+  </div>
+  
+
+  <script src="spending.js"></script>
+  <script>
+  function toggleNavbar() {
+    const navLinks = document.getElementById('navLinks');
+    const toggleBtn = document.getElementById('navbarToggle');
+
+    navLinks.classList.toggle('show');
+
+    if (navLinks.classList.contains('show')) {
+      navLinks.style.maxHeight = navLinks.scrollHeight + "px";
+      toggleBtn.textContent = '✖';
+    } else {
+      navLinks.style.maxHeight = null;
+      toggleBtn.textContent = '☰';
+    }
+  }
+</script>
+
+
+</body>
+</html>
